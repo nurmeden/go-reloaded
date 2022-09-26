@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -15,38 +15,36 @@ func check(e error) {
 
 func main() {
 	f, err := os.Create("result.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err)
 
 	defer f.Close()
 
-	result := ""
 	dat, _ := os.ReadFile("sample.txt")
 	splittedString := strings.Split(string(dat), " ")
-	for i, _ := range splittedString {
+	for i := range splittedString {
 		if string(splittedString[i]) == "(up)" {
 			Upperstr := strings.ToUpper(splittedString[i-1])
-			if i != 0 {
-				result = result + " " + Upperstr
-			}
-			i++
-		} else if string(splittedString[i]) == "(low, 3)" {
+			splittedString[i-1] = Upperstr
+			splittedString[i] = ""
+		} else if string(splittedString[i]) == "(low)" {
 			Lowerstr := strings.ToLower(splittedString[i-1])
-			if i != 0 {
-				result = result + " " + Lowerstr
-			}
-			i++
-		}
-		if i != 0 {
-			result = result + " " + splittedString[i]
-		} else {
-			result = result + splittedString[i]
+			splittedString[i-1] = Lowerstr
+			splittedString[i] = ""
+		} else if string(splittedString[i]) == "(cap)" {
+			Titlestr := strings.Title(splittedString[i-1])
+			splittedString[i-1] = Titlestr
+			splittedString[i] = ""
+		} else if string(splittedString[i]) == "(bin)" {
+			i, _ := strconv.Atoi(splittedString[i-1])
+			Binstr := strconv.FormatInt(int64(i), 10)
+			splittedString[i-1] = Binstr
+			fmt.Println(splittedString[i-1])
+			splittedString[i] = ""
 		}
 	}
 
-	_, err2 := f.Write([]byte(result))
-	check(err2)
-	fmt.Println(" ")
-	fmt.Println(splittedString[2])
+	for i := 0; i < len(splittedString); i++ {
+		_, err2 := f.Write([]byte(splittedString[i]))
+		check(err2)
+	}
 }
