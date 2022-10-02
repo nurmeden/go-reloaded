@@ -1,10 +1,6 @@
 package functions
 
-import "fmt"
-
 func CheckPunctuations(splittedString []string) []string {
-	fmt.Println(splittedString)
-
 	for i := 0; i < len(splittedString)-1; i++ {
 		arr := []string{}
 		for j := 0; j < len(splittedString[i])-1; j++ {

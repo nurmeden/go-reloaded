@@ -25,7 +25,7 @@ func main() {
 
 		splittedString = functions.GroupsFunc(splittedString)
 
-		splittedString = functions.CheckPunctuationMark(splittedString, count, flag)
+		splittedString, count = functions.CheckPunctuationMark(splittedString, count, flag)
 
 		splittedString = functions.CheckPunctuations(splittedString)
 
