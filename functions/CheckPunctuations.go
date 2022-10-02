@@ -1,28 +1,27 @@
 package functions
 
-import (
-	"strings"
-)
+import "fmt"
 
-func CheckPunctuations(splittedString []string, count int) ([]string, int) {
-	for i := 0; i < len(splittedString[:len(splittedString)-count]); i++ {
-		if splittedString[i] == "," || splittedString[i] == "." || splittedString[i] == "?" || splittedString[i] == "!" || splittedString[i] == ";" || splittedString[i] == ":" { // IT,  WAS
-			splittedString[i-1] += splittedString[i] // []string{"was,",it"}
-			RemoveIndex(splittedString, i)
-			count++
-		} else if splittedString[i][0] == ',' || splittedString[i][0] == '.' || splittedString[i][0] == '?' || splittedString[i][0] == '!' || splittedString[i][0] == ';' || splittedString[i][0] == ':' { // IT, WAS
-			splittedString[i-1] += string(splittedString[i][0]) // hello(0) ,world(1) of,the
-			RemoveIndex(splittedString, i)
-			count++
-		}
-		k := strings.IndexRune(splittedString[i], ',')
-		las := strings.HasSuffix(splittedString[i], ",")
-		if k >= 0 && len(splittedString[i]) > 1 && !las {
-			splitstr := strings.Split(splittedString[i], ",")
-			splitstr[0] += "," + " " + splitstr[1]
-			splittedString[i] = splitstr[0]
-			count += 2
+func CheckPunctuations(splittedString []string) []string {
+	fmt.Println(splittedString)
+
+	for i := 0; i < len(splittedString)-1; i++ {
+		arr := []string{}
+		for j := 0; j < len(splittedString[i])-1; j++ {
+			if ((splittedString[i][j+1] <= 90 && splittedString[i][j+1] >= 65) || (splittedString[i][j+1] >= 97 && splittedString[i][j+1] <= 122)) && (33 <= splittedString[i][j] && 47 >= splittedString[i][j]) || (58 <= splittedString[i][j] && 63 >= splittedString[i][j]) {
+				first_half := splittedString[i][:j+1]
+				second_falf := splittedString[i][j+1:]
+				last_half := splittedString[i+1:]
+				arr = append(arr, splittedString[:i]...)
+
+				arr = append(arr, first_half)
+
+				arr = append(arr, second_falf)
+
+				arr = append(arr, last_half...)
+				splittedString = arr
+			}
 		}
 	}
-	return splittedString, count
+	return splittedString
 }

@@ -21,11 +21,13 @@ func main() {
 
 		splittedString := strings.Split(string(dat), " ")
 
-		splittedString = functions.CheckPunctuationMark(splittedString, count, flag)
-
 		splittedString, count, flag = functions.Check(splittedString, count, flag)
 
-		splittedString, count = functions.CheckPunctuations(splittedString, count)
+		splittedString = functions.GroupsFunc(splittedString)
+
+		splittedString = functions.CheckPunctuationMark(splittedString, count, flag)
+
+		splittedString = functions.CheckPunctuations(splittedString)
 
 		splittedString = functions.CheckVowels(splittedString, count)
 

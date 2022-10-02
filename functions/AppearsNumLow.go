@@ -10,6 +10,11 @@ func AppearsNumLow(splittedString []string, i int, numm int, count int, flag boo
 	RemoveIndex(splittedString, i)
 	RemoveIndex(splittedString, i)
 	count += 2
+
+	// if splittedString[i+1][len(splittedString[i+1])-1] == ',' {
+
+	// }
+
 	if flag == true {
 		splittedString, count, flag = Check(splittedString, count, flag)
 	}
