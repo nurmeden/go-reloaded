@@ -7,20 +7,49 @@ import (
 )
 
 func Check(splittedString []string, count int, flag bool) ([]string, int, bool) {
-	// for i := 0; i < len(splittedString); i++ {
-	// 	fmt.Print("[" + splittedString[i] + "]")
-	// }
-	for i := range splittedString {
+	for i := 0; i < len(splittedString); i++ {
+		// strs := []string{"(cap)","(low)","(up)"}
 		if string(splittedString[i]) == "(cap)" {
-			Titlestr := strings.Title(splittedString[i-1])
-			splittedString, count, flag = replace(splittedString, Titlestr, i, count, flag)
-		} else if string(splittedString[i]) == "(up)" {
-			Upperstr := strings.ToUpper(splittedString[i-1])
-			splittedString, count, flag = replace(splittedString, Upperstr, i, count, flag)
-		} else if string(splittedString[i]) == "(low)" {
 			Lowerstr := strings.ToLower(splittedString[i-1])
-			splittedString, count, flag = replace(splittedString, Lowerstr, i, count, flag)
-		} else if string(splittedString[i]) == "(bin)" {
+			Titlestr := strings.Title(Lowerstr)
+			if i == len(splittedString)-1 {
+				splittedString[i-1] = Titlestr
+				splittedString = RemoveIndex(splittedString, i)
+				count++
+				i--
+				break
+			} else {
+				splittedString, count, flag = replace(splittedString[:len(splittedString)-count], Titlestr, i, count, flag)
+				break
+			}
+		}
+		if string(splittedString[i]) == "(up)" {
+			Upperstr := strings.ToUpper(splittedString[i-1])
+			if i == len(splittedString)-1 {
+				splittedString[i-1] = Upperstr
+			    splittedString = RemoveIndex(splittedString, i)
+				count++
+				i--
+				break
+			} else {
+				splittedString, count, flag = replace(splittedString, Upperstr, i, count, flag)
+				break
+			}
+		}
+		if string(splittedString[i]) == "(low)" {
+			Lowerstr := strings.ToLower(splittedString[i-1])
+			if i == len(splittedString)-1 {
+				splittedString[i-1] = Lowerstr
+			    splittedString = RemoveIndex(splittedString, i)
+				count++
+				i--
+				break
+			} else {
+				splittedString, count, flag = replace(splittedString, Lowerstr, i, count, flag)
+				break
+			}
+		}
+        if string(splittedString[i]) == "(bin)" {
 			Decstr, err := strconv.ParseInt(string(splittedString[i-1]), 2, 64)
 			CheckErr(err)
 			splittedString, count = replaceDigits(splittedString, int(Decstr), i, count)
@@ -76,9 +105,6 @@ func Check(splittedString []string, count int, flag bool) ([]string, int, bool) 
 					splittedString, count, flag = AppearsNumUp(splittedString, i, numm, count, flag)
 				}
 			}
-		} else if string(splittedString[i]) == "" {
-			RemoveIndex(splittedString, i)
-			count++
 		}
 	}
 

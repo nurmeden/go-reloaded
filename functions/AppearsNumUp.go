@@ -10,7 +10,7 @@ func AppearsNumUp(splittedString []string, i int, numm int, count int, flag bool
 	RemoveIndex(splittedString, i)
 	RemoveIndex(splittedString, i)
 	count += 2
-	if flag == true {
+	if flag == true  {
 		splittedString, count, flag = Check(splittedString, count, flag)
 	}
 	return splittedString, count, flag
