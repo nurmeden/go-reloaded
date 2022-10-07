@@ -8,47 +8,45 @@ import (
 )
 
 func main() {
-	f, err := os.Create("result.txt")
-	functions.CheckErr(err)
-
-	defer f.Close()
-
 	flag := true
 
-	os.Args = []string{".", "sample.txt", "result.txt"}
-
-	if len(os.Args) == 3 && os.Args[1] == "sample.txt" && os.Args[2] == "result.txt" {
+	if len(os.Args) == 3 && (os.Args[1] == "sample.txt" && os.Args[2][len(os.Args[2])-4:] == ".txt") {
 		count := 0
-		dat, _ := os.ReadFile("sample.txt")
+		dat, err := os.ReadFile("sample.txt")
+		functions.CheckErr(err)
+		str := string(dat)
+		splittedString := strings.Split(str, " ")
 
-		splittedString := strings.Split(string(dat), " ")
-
-		splittedString, count, flag = functions.Check(splittedString, count, flag)
-		fmt.Println(splittedString)
-
-		splittedString = functions.GroupsFunc(splittedString)
-		fmt.Println(splittedString)
-
-		splittedString, count = functions.CheckPunctuationMark(splittedString, count, flag)
-		fmt.Println(splittedString)
-
-		splittedString = functions.CheckPunctuations(splittedString)
-		fmt.Println(splittedString)
-
-		splittedString = functions.CheckVowels(splittedString, count)
-		fmt.Println(splittedString)
+		splittedString = functions.FirstArgs(splittedString)
 
 		splittedString, count = functions.RemoveSpaces(splittedString, count)
-		fmt.Println(splittedString)
+
+		splittedString, count = functions.CheckPunctuationMark(splittedString, count, flag)
+		// splittedString = functions.GroupsFunc(splittedString)
+
+		splittedString, count, flag = functions.Check(splittedString, count, flag)
+
+		splittedString = functions.GroupsFunc(splittedString)
+
+		splittedString = functions.CheckPunctuations(splittedString)
+
+		splittedString = functions.CheckVowels(splittedString, count)
 
 		result := functions.Result_words(splittedString, count)
+		resultbyte := []byte(result)
 
-		_, err2 := f.Write([]byte(result))
-		functions.CheckErr(err2)
+		errResult := os.WriteFile(os.Args[2], resultbyte, 0644)
+		functions.CheckErr(errResult)
 	} else {
 		fmt.Println("error arguments")
 	}
 
-
 	// str := [3]string{"up","low","cap"}
+	// f, err := os.Create(os.Args[2])
+	// functions.CheckErr(err)
+
+	// defer f.Close()
+
+	// _, err2 := f.Write([]byte(result))
+	// functions.CheckErr(err2)
 }

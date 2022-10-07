@@ -1,2 +1,1 @@
-asd fasdfas 56 (cap, 2) dfasdf aA ?!
-
+Punctuation tests are ... kinda boring ,don't you think !?

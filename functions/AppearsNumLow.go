@@ -7,8 +7,8 @@ func AppearsNumLow(splittedString []string, i int, numm int, count int, flag boo
 		Lowerstr := strings.ToLower(splittedString[(i+j)-numm])
 		splittedString[(i+j)-numm] = Lowerstr
 	}
-	RemoveIndex(splittedString, i)
-	RemoveIndex(splittedString, i)
+	splittedString = RemoveIndex(splittedString, i)
+	splittedString = RemoveIndex(splittedString, i)
 	count += 2
 
 	// if splittedString[i+1][len(splittedString[i+1])-1] == ',' {

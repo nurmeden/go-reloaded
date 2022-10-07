@@ -9,7 +9,7 @@ import (
 func Check(splittedString []string, count int, flag bool) ([]string, int, bool) {
 	for i := 0; i < len(splittedString); i++ {
 		// strs := []string{"(cap)","(low)","(up)"}
-		if string(splittedString[i]) == "(cap)" {
+		if string(splittedString[i]) == "(cap)" || string(splittedString[i]) == "(cap)\n" {
 			Lowerstr := strings.ToLower(splittedString[i-1])
 			Titlestr := strings.Title(Lowerstr)
 			if i == len(splittedString)-1 {
@@ -19,15 +19,15 @@ func Check(splittedString []string, count int, flag bool) ([]string, int, bool) 
 				i--
 				break
 			} else {
-				splittedString, count, flag = replace(splittedString[:len(splittedString)-count], Titlestr, i, count, flag)
+				splittedString, count, flag = replace(splittedString, Titlestr, i, count, flag)
 				break
 			}
 		}
-		if string(splittedString[i]) == "(up)" {
+		if string(splittedString[i]) == "(up)" || string(splittedString[i]) == "(up)\n" {
 			Upperstr := strings.ToUpper(splittedString[i-1])
 			if i == len(splittedString)-1 {
 				splittedString[i-1] = Upperstr
-			    splittedString = RemoveIndex(splittedString, i)
+				splittedString = RemoveIndex(splittedString, i)
 				count++
 				i--
 				break
@@ -36,11 +36,11 @@ func Check(splittedString []string, count int, flag bool) ([]string, int, bool) 
 				break
 			}
 		}
-		if string(splittedString[i]) == "(low)" {
+		if string(splittedString[i]) == "(low)" || string(splittedString[i]) == "(low)\n" {
 			Lowerstr := strings.ToLower(splittedString[i-1])
 			if i == len(splittedString)-1 {
 				splittedString[i-1] = Lowerstr
-			    splittedString = RemoveIndex(splittedString, i)
+				splittedString = RemoveIndex(splittedString, i)
 				count++
 				i--
 				break
@@ -49,18 +49,19 @@ func Check(splittedString []string, count int, flag bool) ([]string, int, bool) 
 				break
 			}
 		}
-        if string(splittedString[i]) == "(bin)" {
+		if string(splittedString[i]) == "(bin)" || string(splittedString[i]) == "(bin)\n" {
 			Decstr, err := strconv.ParseInt(string(splittedString[i-1]), 2, 64)
 			CheckErr(err)
 			splittedString, count = replaceDigits(splittedString, int(Decstr), i, count)
-		} else if string(splittedString[i]) == "(hex)" {
+		} else if string(splittedString[i]) == "(hex)" || string(splittedString[i]) == "(hex)\n" {
 			Hexstr, err := strconv.ParseInt(string(splittedString[i-1]), 16, 64)
 			CheckErr(err)
 			splittedString, count = replaceDigits(splittedString, int(Hexstr), i, count)
 		} else if string(splittedString[i]) == "(cap," {
-			if splittedString[i+1][len(splittedString[i+1])-1] == ')' {
+			index_punc := strings.IndexRune(splittedString[i+1], ')')
+			if index_punc > 0 {
 				num := splittedString[i+1]
-				numm, err := strconv.Atoi(string(num[:len(num)-1]))
+				numm, err := strconv.Atoi(string(num[:index_punc]))
 				CheckErr(err)
 				if numm <= 0 {
 					flag = false
@@ -73,15 +74,14 @@ func Check(splittedString []string, count int, flag bool) ([]string, int, bool) 
 				}
 			}
 		} else if string(splittedString[i]) == "(low," {
-			if splittedString[i+1][len(splittedString[i+1])-1] == ')' {
+			index_punc := strings.IndexRune(splittedString[i+1], ')')
+			if index_punc > 0 {
 				num := splittedString[i+1] // 43)
-				numm, err := strconv.Atoi(string(num[:len(num)-1]))
+				numm, err := strconv.Atoi(string(num[:index_punc]))
 				CheckErr(err)
 				if numm <= 0 {
 					flag = false
 					fmt.Println("a number is negative or zero")
-					RemoveIndex(splittedString, i)
-					RemoveIndex(splittedString, i)
 					count += 2
 				} else if numm <= len(splittedString[:i]) && numm > 0 {
 					splittedString, count, flag = AppearsNumLow(splittedString, i, numm, count, flag)
@@ -91,9 +91,10 @@ func Check(splittedString []string, count int, flag bool) ([]string, int, bool) 
 				}
 			}
 		} else if string(splittedString[i]) == "(up," {
-			if splittedString[i+1][len(splittedString[i+1])-1] == ')' {
+			index_punc := strings.IndexRune(splittedString[i+1], ')')
+			if index_punc > 0 {
 				num := splittedString[i+1]
-				numm, err := strconv.Atoi(string(num[:len(num)-1]))
+				numm, err := strconv.Atoi(string(num[:index_punc]))
 				CheckErr(err)
 				if numm <= 0 {
 					flag = false
@@ -110,3 +111,5 @@ func Check(splittedString []string, count int, flag bool) ([]string, int, bool) 
 
 	return splittedString, count, flag
 }
+
+// splittedString[i+1][len(splittedString[i+1])-1] == ')'

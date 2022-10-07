@@ -9,14 +9,14 @@ func CheckPunctuationMark(splittedString []string, count int, flag bool) ([]stri
 					splittedString[i+1] = string(splittedString[i][j]) + splittedString[i+1]
 					// splittedString[i] = splittedString[i][j+1:]
 					if j == len(splittedString[i])-1 {
-						RemoveIndex(splittedString, i)
+						splittedString = RemoveIndex(splittedString, i)
 					}
 					countmarks++
 				} else {
 					splittedString[i-1] += string(splittedString[i][j])
 					// splittedString[i] = splittedString[i][j+1:]
 					if j == len(splittedString[i])-1 {
-						RemoveIndex(splittedString, i)
+						splittedString = RemoveIndex(splittedString, i)
 					}
 					countmarks++
 				}
@@ -24,6 +24,10 @@ func CheckPunctuationMark(splittedString []string, count int, flag bool) ([]stri
 				break
 			}
 		}
+	}
+	if splittedString[len(splittedString)-1] == "'" {
+		splittedString[len(splittedString)-2] += "'"
+		splittedString = RemoveIndex(splittedString, len(splittedString)-1)
 	}
 	return splittedString, count
 }
